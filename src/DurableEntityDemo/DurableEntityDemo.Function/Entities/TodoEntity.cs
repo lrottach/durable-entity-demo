@@ -7,26 +7,33 @@ namespace DurableEntityDemo.Function.Entities;
 
 public class TodoEntity : TaskEntity<TodoState>
 {
-    private readonly ILogger<TodoEntity> _logger;
+    private readonly ILogger _logger;
 
     public TodoEntity(ILogger<TodoEntity> logger)
     {
         _logger = logger;
+        _logger.LogInformation("Log 1");
     }
     
-    public Task Initialize(int userId, int id, string title, bool completed)
+    public Task Initialize()
     {
+        // Create sample TodoState and save to state
         State = new TodoState
         {
-            UserId = userId,
-            Id = id,
-            Title = title,
-            Completed = completed
+            UserId = 1,
+            Id = 1,
+            Title = "delectus aut autem",
+            Completed = false
         };
+
+        // Print the state to the log
+        _logger.LogInformation("Log 2");
+        Console.WriteLine($"Initialized TodoEntity with state: {State.Id}");
+        
         return Task.CompletedTask;
     }
     
     [Function(nameof(TodoEntity))]
-    public static Task Run([EntityTrigger] TaskEntityDispatcher dispatcher)
+    public static Task RunEntityStaticAsync([EntityTrigger] TaskEntityDispatcher dispatcher)
         => dispatcher.DispatchAsync<TodoEntity>();
 }
