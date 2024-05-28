@@ -1,13 +1,23 @@
 using System.Text.Json;
 using DurableEntityDemo.Function.Models;
+using Microsoft.Extensions.Logging;
 
 namespace DurableEntityDemo.Function.Services;
 
-public class TodoService
+public class TodoService : ITodoService
 {
-    // Method called GetTodoAsync to request a new todo item from https://jsonplaceholder.typicode.com/todos/1 and return a TodoState object
-    public async Task<TodoState?> GetTodoAsync(int entityKey)
+    private readonly ILogger _logger;
+
+    public TodoService(ILogger<TodoService> logger)
     {
+        _logger = logger;
+    }
+    
+    // Method called GetTodoAsync to request a new todo item from https://jsonplaceholder.typicode.com/todos/1 and return a TodoState object
+    public async Task<TodoState?> GetTodoAsync(string entityKey)
+    {
+        _logger.LogInformation("Start requesting a new todo for entity key: {entityKey}", entityKey);
+        
         // Create a new HttpClient
         using var client = new HttpClient();
         

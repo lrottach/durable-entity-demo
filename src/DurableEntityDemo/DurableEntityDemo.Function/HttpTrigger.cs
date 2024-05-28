@@ -36,7 +36,7 @@ public class HttpTrigger
         _logger.LogInformation("Entity key: {EntityKey}", entityKey);
         
         var entityId = new EntityInstanceId(nameof(TodoEntity), entityKey);
-        await client.Entities.SignalEntityAsync(entityId, "Initialize");
+        await client.Entities.SignalEntityAsync(entityId, "InitializeAsync", entityKey);
 
         return req.CreateResponse(HttpStatusCode.Accepted);
     }

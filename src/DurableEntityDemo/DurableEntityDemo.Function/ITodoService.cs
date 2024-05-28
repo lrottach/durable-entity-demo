@@ -4,5 +4,5 @@ namespace DurableEntityDemo.Function;
 
 public interface ITodoService
 {
-    Task<TodoState?> GetTodoAsync(int entityKey);
+    Task<TodoState?> GetTodoAsync(string entityKey);
 }

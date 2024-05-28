@@ -8,24 +8,19 @@ namespace DurableEntityDemo.Function.Entities;
 public class TodoEntity : TaskEntity<TodoState>
 {
     private readonly ILogger _logger;
+    private readonly ITodoService _todoService;
 
-    public TodoEntity(ILogger<TodoEntity> logger)
+    public TodoEntity(ILogger<TodoEntity> logger, ITodoService todoService)
     {
         _logger = logger;
-        _logger.LogInformation("Log 1");
+        _todoService = todoService;
     }
     
-    public Task Initialize()
+    public async Task<Task> InitializeAsync(string entityKey)
     {
-        // Create sample TodoState and save to state
-        State = new TodoState
-        {
-            UserId = 1,
-            Id = 1,
-            Title = "delectus aut autem",
-            Completed = false
-        };
-
+        // Get the todo item from the service
+        State = await _todoService.GetTodoAsync(entityKey) ?? throw new InvalidOperationException();
+        
         // Print the state to the log
         _logger.LogInformation("Log 2");
         Console.WriteLine($"Initialized TodoEntity with state: {State.Id}");
