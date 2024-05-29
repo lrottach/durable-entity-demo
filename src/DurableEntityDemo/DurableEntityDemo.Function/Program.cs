@@ -8,6 +8,7 @@ var host = new HostBuilder()
     .ConfigureServices(services =>
     {
         services.AddSingleton<ITodoService, TodoService>();
+        // services.AddSingleton<IAzureResourceService, AzureResourceService>();
     })
     .Build();
 
